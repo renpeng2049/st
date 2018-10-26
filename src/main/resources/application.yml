@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: st
+
+
+elasticJob:
+  regCenter: 10.125.56.153:2181
+  namespace: elastic_job
+
+
+taskJob:
+  cron: 0/5 * * * * ?
+  shardingTotalCount: 1
+
+
+tooldb:
+  driver: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://10.125.30.34:3306/cftoss_log?useUnicode=true;characterEncoding=utf-8
+  username: cftoss_log
+  password: cftoss_log@c123
+  initialSize: 20
+  maxIdle: 10
+  minIdle: 5
+  maxWaitMillis: 10000
