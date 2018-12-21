@@ -3,7 +3,7 @@ spring:
     name: st
 
 server:
-  port: 9000
+  port: 9001
 
 elasticsearch:
   ipports:

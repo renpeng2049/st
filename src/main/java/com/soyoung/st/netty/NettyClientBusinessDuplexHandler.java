@@ -4,15 +4,18 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.util.concurrent.GlobalEventExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NettyBusinessDuplexHandler extends ChannelDuplexHandler {
-    private static Logger logger = LoggerFactory.getLogger(NettyBusinessDuplexHandler.class);
+public class NettyClientBusinessDuplexHandler extends ChannelDuplexHandler {
+    private static Logger logger = LoggerFactory.getLogger(NettyClientBusinessDuplexHandler.class);
 
     private AppBusinessProcessor bizProcessor = null;
 
-    public NettyBusinessDuplexHandler(AppBusinessProcessor appBizHandler) {
+    public NettyClientBusinessDuplexHandler(AppBusinessProcessor appBizHandler) {
         super();
         this.bizProcessor = appBizHandler;
     }
@@ -38,15 +41,6 @@ public class NettyBusinessDuplexHandler extends ChannelDuplexHandler {
         // 继续传递给Pipeline下一个Handler
         // super.channelRead(ctx, msg);
         // ctx.fireChannelRead(msg);
-    }
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        super.channelActive(ctx);
-
-        logger.info("连接建立2" + ctx.channel());
-        //Constants.channels.add(ctx.channel());
-        NettyServerProxy.INSTANCE.addToChannelGroup(ctx.channel());
     }
 
 }

@@ -1,10 +1,9 @@
 package com.soyoung.st.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
@@ -18,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class NettyServer {
@@ -56,6 +56,7 @@ public class NettyServer {
 
     private EventExecutorGroup bizGroup = null;
 
+
     public NettyServer(int port) {
         this.port = port;
     }
@@ -75,6 +76,7 @@ public class NettyServer {
         // LoggingHandler loggingHandler = new LoggingHandler(LogLevel.INFO);
         // 业务线程池，用于执行业务
         bizGroup = new DefaultEventExecutorGroup(bizThreadNum);
+
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class);
@@ -140,13 +142,23 @@ public class NettyServer {
     }
 
     public static void main(String[] args) {
-        NettyServer server = new NettyServer(7890);
+        NettyServer server = new NettyServer(7899);
         server.start();
 
-        try {
-            waitToQuit(server);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        //控制台输入
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNext()) {
+
+            String message = sc.next(); //TODO 控制台输入
+
+            logger.info("控制台输入:{}",message);
+            NettyMessage bizMsg = new NettyMessage(message);
+            bizMsg.setLogId(123);
+
+
+            ByteBuf buf = Unpooled.copiedBuffer(bizMsg.composeFull());
+            Constants.channels.writeAndFlush(buf);
         }
     }
 

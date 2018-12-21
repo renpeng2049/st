@@ -9,9 +9,9 @@ import io.netty.handler.timeout.IdleStateEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NettyHeartBeatDuplexHandler  extends ChannelDuplexHandler {
+public class NettyClientHeartBeatDuplexHandler extends ChannelDuplexHandler {
 
-    private static Logger logger = LoggerFactory.getLogger(NettyHeartBeatDuplexHandler.class);
+    private static Logger logger = LoggerFactory.getLogger(NettyClientHeartBeatDuplexHandler.class);
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
@@ -45,7 +45,6 @@ public class NettyHeartBeatDuplexHandler  extends ChannelDuplexHandler {
             // super.userEventTriggered(ctx, evt);
         } else {
             // 其他事件转发给Pipeline中其他的Handler处理
-            logger.info(">>>>>>>");
             super.userEventTriggered(ctx, evt);
         }
     }

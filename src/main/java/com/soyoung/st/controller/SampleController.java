@@ -1,6 +1,8 @@
 package com.soyoung.st.controller;
 
 import com.soyoung.st.common.EsClient;
+import com.soyoung.st.netty.NettyMessage;
+import com.soyoung.st.netty.NettyServerProxy;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.client.transport.TransportClient;
@@ -51,6 +53,15 @@ public class SampleController {
         if(bulkResponse.hasFailures()){
             return "fail";
         }
+
+        return "ok";
+    }
+
+    @RequestMapping("/sendMsg")
+    public String sendMsg(String msg,String ip) throws Exception {
+
+        NettyMessage bizMsg = new NettyMessage(msg);
+        NettyServerProxy.INSTANCE.sendMsg(bizMsg,ip,10000L);
 
         return "ok";
     }

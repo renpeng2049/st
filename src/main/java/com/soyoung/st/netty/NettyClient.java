@@ -49,9 +49,9 @@ public class NettyClient {
                 public void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                     ch.pipeline().addLast(new IdleStateHandler(60, 20, 0, TimeUnit.SECONDS));
-                    ch.pipeline().addLast(new NettyHeartBeatDuplexHandler());
+                    ch.pipeline().addLast(new NettyClientHeartBeatDuplexHandler());
                     ch.pipeline().addLast(new NettyMessageDecoder());
-                    ch.pipeline().addLast(bizGroup, new NettyBusinessDuplexHandler(new ClientBusinessProcessor()));
+                    ch.pipeline().addLast(bizGroup, new NettyClientBusinessDuplexHandler(new ClientBusinessProcessor()));
                 }
             });
 
@@ -121,7 +121,7 @@ public class NettyClient {
     public static void main(String[] args) {
         NettyClient client = new NettyClient();
         client.setIp("127.0.0.1");
-        client.setPort(7890);
+        client.setPort(7899);
 
         client.connect();
 
