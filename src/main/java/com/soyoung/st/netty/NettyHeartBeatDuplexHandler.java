@@ -17,6 +17,7 @@ public class NettyHeartBeatDuplexHandler  extends ChannelDuplexHandler {
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         logger.info("连接关闭" + ctx.channel());
         super.channelInactive(ctx);
+        NettyServerProxy.INSTANCE.removeFromChannelGroup(ctx.channel());
     }
 
     @Override

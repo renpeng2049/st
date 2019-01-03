@@ -33,7 +33,7 @@ public class ResponseFuture {
     private final SemaphoreReleaseOnlyOnce once;
 
     private final AtomicBoolean executeCallbackOnlyOnce = new AtomicBoolean(false);
-    private volatile NettyMessage responseCommand;
+    private volatile ChannelOsRsp responseCommand;
     private volatile boolean sendRequestOK = true;
     private volatile Throwable cause;
 
@@ -65,12 +65,12 @@ public class ResponseFuture {
         return diff > this.timeoutMillis;
     }
 
-    public NettyMessage waitResponse(final long timeoutMillis) throws InterruptedException {
+    public ChannelOsRsp waitResponse(final long timeoutMillis) throws InterruptedException {
         this.countDownLatch.await(timeoutMillis, TimeUnit.MILLISECONDS);
         return this.responseCommand;
     }
 
-    public void putResponse(final NettyMessage responseCommand) {
+    public void putResponse(final ChannelOsRsp responseCommand) {
         this.responseCommand = responseCommand;
         this.countDownLatch.countDown();
     }
@@ -103,11 +103,11 @@ public class ResponseFuture {
         this.cause = cause;
     }
 
-    public NettyMessage getResponseCommand() {
+    public ChannelOsRsp getResponseCommand() {
         return responseCommand;
     }
 
-    public void setResponseCommand(NettyMessage responseCommand) {
+    public void setResponseCommand(ChannelOsRsp responseCommand) {
         this.responseCommand = responseCommand;
     }
 

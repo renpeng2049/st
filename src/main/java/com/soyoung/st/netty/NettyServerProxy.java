@@ -108,7 +108,13 @@ public enum NettyServerProxy {
         logger.info("新连接建立，{},当前channelGroup个数:{}",channel,channelGroup.size());
     }
 
-    public NettyMessage sendMsg(NettyMessage msg,String ip,Long timeoutMillis) throws RemotingException,InterruptedException, RemotingSendRequestException, RemotingTimeoutException{
+    public void removeFromChannelGroup(Channel channel){
+        String ip = parseSocketAddressAddr(channel.remoteAddress());
+        channelMap.remove(ip);
+    }
+
+    public ChannelOsRsp sendMsg(NettyMessage msg,String ip,Long timeoutMillis) throws RemotingException,InterruptedException, RemotingSendRequestException, RemotingTimeoutException{
+
 
         Channel channel = channelMap.get(ip);
         if(null == channel){
@@ -140,7 +146,7 @@ public enum NettyServerProxy {
                 }
             });
 
-            NettyMessage responseCommand = responseFuture.waitResponse(timeoutMillis);
+            ChannelOsRsp responseCommand = responseFuture.waitResponse(timeoutMillis);
 
             if (null == responseCommand) {
                 if (responseFuture.isSendRequestOK()) {
@@ -159,12 +165,12 @@ public enum NettyServerProxy {
 
     }
 
-    public void putResponse(NettyMessage msg){
+    public void putResponse(ChannelOsRsp msg,Integer logId){
 
-        ResponseFuture responseFuture = this.responseTable.get(msg.getLogId());
+        ResponseFuture responseFuture = this.responseTable.get(logId);
         if(null != responseFuture){
 
-            this.responseTable.remove(msg.getLogId());
+            this.responseTable.remove(logId);
             responseFuture.putResponse(msg);
         }
     }
