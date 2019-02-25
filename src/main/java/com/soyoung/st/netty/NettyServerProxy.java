@@ -78,7 +78,6 @@ public enum NettyServerProxy {
                 public void initChannel(SocketChannel ch) throws Exception {
                     ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
                     ch.pipeline().addLast(new IdleStateHandler(60, 20, 0, TimeUnit.SECONDS));
-                    ch.pipeline().addLast(new NettyHeartBeatDuplexHandler());
                     ch.pipeline().addLast(new NettyMessageDecoder());
                     ch.pipeline().addLast(bizGroup, new NettyBusinessDuplexHandler(new ServerBusinessProcessor()));
 
