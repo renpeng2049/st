@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: st
+
+server:
+  port: 9001
+
+elasticsearch:
+  ipports:
+
+elasticJob:
+  regCenter: 10.125.56.153:2181
+  namespace: elastic_job
+
+
+taskJob:
+  cron: 0 5 0 * * ?
+  shardingTotalCount: 1
+
+
+tooldb:
+  driver: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://10.125.30.34:3306/cftoss_log?useUnicode=true;characterEncoding=utf-8
+  username: cftoss_log
+  password: cftoss_log@c123
+  initialSize: 20
+  maxIdle: 10
+  minIdle: 5
+  maxWaitMillis: 10000
+
+serial:
+  db:
+  step: 5
+  file:
+    step: 2
+    path: E:/src/tfae/VB/SubAccount/src/main/resources/serial.txt
+  load:
+    batch:
+      size: 10000
+  min:
+    batch: 500
+  max:
+    batch: 2000
+  reload:
+    threshold: 2000
